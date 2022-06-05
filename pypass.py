@@ -115,7 +115,7 @@ if __name__ == "__main__":
                 "usage: pypass.py [--help] [--gui | -g] [--high | --medium | --low] [-h | -m | -l]\n"
             )
             print("options:")
-            print("    --help          show this help message")
+            print("        --help      show this help message")
             print("    -g, --gui       open in GUI mode")
             print("    -h, --high      16-character password")
             print("    -m, --medium    12-character password")
