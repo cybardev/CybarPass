@@ -22,7 +22,7 @@ def generate_password(length: int = PASS_STRENGTHS["High"]) -> str:
     """Generate a random password of the given length.
 
     Args:
-        length (int, optional): length of password. Defaults to PASS_STRENGTHS["High"].
+        length (int, optional): length of password. Defaults to 16.
 
     Returns:
         str: generated password
@@ -116,7 +116,7 @@ if __name__ == "__main__":
             )
             print("options:")
             print("    --help          show this help message")
-            print("    -g, --gui           open in GUI mode")
+            print("    -g, --gui       open in GUI mode")
             print("    -h, --high      16-character password")
             print("    -m, --medium    12-character password")
             print("    -l, --low        8-character password")
