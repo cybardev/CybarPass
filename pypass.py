@@ -10,7 +10,7 @@ WINDOW_WIDTH = 500
 WINDOW_HEIGHT = 400
 DEFAULT_FONT = "Arial"
 DEFAULT_FONT_SIZE = 14
-PASS_STRENGTHS = {
+PASS_STRENGTH = {
     "Low": 8,
     "Medium": 12,
     "High": 16,
@@ -18,11 +18,11 @@ PASS_STRENGTHS = {
 }  # strength: password length
 
 
-def generate_password(length: int = PASS_STRENGTHS["High"]) -> str:
+def generate_password(length: int = PASS_STRENGTH["High"]) -> str:
     """Generate a random password of the given length.
 
     Args:
-        length (int, optional): length of password. Defaults to 16.
+        length (int, optional): length of password. Defaults to PASS_STRENGTH["High"].
 
     Returns:
         str: generated password
@@ -66,7 +66,9 @@ def create_gui() -> None:
     strength_selector = Combobox(
         screen, font=(DEFAULT_FONT, DEFAULT_FONT_SIZE), width=18
     )
-    strength_selector["values"] = tuple(PASS_STRENGTHS.keys())
+    strength_selector["values"] = tuple(
+        k for k in PASS_STRENGTH.keys() if k
+    )  # set non-empty values from dictionary
     strength_selector["state"] = "readonly"
     strength_selector.current(2)
     strength_selector.place(x=200, y=135)
@@ -77,7 +79,7 @@ def create_gui() -> None:
         text="Generate",
         font=(DEFAULT_FONT, DEFAULT_FONT_SIZE),
         command=lambda: txt_password.set(
-            generate_password(PASS_STRENGTHS[strength_selector.get()])
+            generate_password(PASS_STRENGTH[strength_selector.get()])
         ),
     )
     btn_generate.place(x=200, y=200)
@@ -127,4 +129,4 @@ if __name__ == "__main__":
     else:
         strength = "High"
 
-    print(generate_password(PASS_STRENGTHS[strength]))
+    print(generate_password(PASS_STRENGTH[strength]))
