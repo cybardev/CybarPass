@@ -6,8 +6,8 @@ from tkinter import *
 from tkinter.ttk import Combobox
 
 # configuration variables
-WINDOW_WIDTH = 500
-WINDOW_HEIGHT = 400
+WINDOW_WIDTH = 300
+WINDOW_HEIGHT = 175
 DEFAULT_FONT = "Arial"
 DEFAULT_FONT_SIZE = 14
 PASS_STRENGTH = {
@@ -39,30 +39,24 @@ def create_gui() -> None:
     screen.title("PyPass")
     screen.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
 
-    # program title
-    lbl_title = Label(
-        screen, text="PyPass", font=(DEFAULT_FONT, 2 * DEFAULT_FONT_SIZE)
-    )
-    lbl_title.place(x=80, y=10)
-
     # generated password
     lbl_password = Label(
         screen, text="Password:", font=(DEFAULT_FONT, DEFAULT_FONT_SIZE)
     )
-    lbl_password.place(x=100, y=100)
+    lbl_password.place(x=25, y=25)
     txt_password = StringVar()
     entry_result = Entry(
         screen,
         font=(DEFAULT_FONT, DEFAULT_FONT_SIZE),
         textvariable=txt_password,
     )
-    entry_result.place(x=200, y=100)
+    entry_result.place(x=100, y=25)
 
     # strength selection dropdown
     lbl_strength = Label(
         screen, text="Strength:", font=(DEFAULT_FONT, DEFAULT_FONT_SIZE)
     )
-    lbl_strength.place(x=113, y=135)
+    lbl_strength.place(x=25, y=75)
     strength_selector = Combobox(
         screen, font=(DEFAULT_FONT, DEFAULT_FONT_SIZE), width=18
     )
@@ -71,7 +65,7 @@ def create_gui() -> None:
     )  # set non-empty values from dictionary
     strength_selector["state"] = "readonly"
     strength_selector.current(2)
-    strength_selector.place(x=200, y=135)
+    strength_selector.place(x=100, y=75)
 
     # generate button
     btn_generate = Button(
@@ -82,7 +76,7 @@ def create_gui() -> None:
             generate_password(PASS_STRENGTH[strength_selector.get()])
         ),
     )
-    btn_generate.place(x=200, y=200)
+    btn_generate.place(x=50, y=125)
 
     # clear button
     btn_clear = Button(
@@ -91,7 +85,7 @@ def create_gui() -> None:
         font=(DEFAULT_FONT, DEFAULT_FONT_SIZE),
         command=lambda: txt_password.set(""),
     )
-    btn_clear.place(x=300, y=200)
+    btn_clear.place(x=175, y=125)
 
     # spawn the GUI
     screen.mainloop()
