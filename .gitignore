@@ -1,1 +1,3 @@
+# Python cache directories
 .mypy_cache
+__pycache__
