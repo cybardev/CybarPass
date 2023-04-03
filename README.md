@@ -1,3 +1,9 @@
+> **LEGACY VERSION**
+>
+> consider using `passgen.py` in `main` for better security
+
+---
+
 # PassGen
 
 ## Minimalistic Passphrase Generation script
