@@ -30,10 +30,10 @@ class PassGen:
 
     @char_limit.setter
     def char_limit(self, value):
-        if value >= 16:
-            self.__char_limit = value
-        else:
+        if value < 16:
             print("Character limit must be at least 16 for security reasons.")
+        else:
+            self.__char_limit = value
 
     @property
     def word_list(self):
