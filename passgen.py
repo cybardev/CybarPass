@@ -67,7 +67,7 @@ class App(tk.Tk):
 
 
 class AppFrame(Frame):
-    def __init__(self, container: tk.Tk) -> None:
+    def __init__(self, container: tk.Tk, filename=None) -> None:
         self.__container = container
         super().__init__(self.__container)
 
@@ -75,6 +75,9 @@ class AppFrame(Frame):
         self.__passgen: PassGen = PassGen()
         self.__txt_password = tk.StringVar()
         self.__word_list_filename = tk.StringVar()
+
+        # preload word list if given
+        self.__word_file(filename)
 
         # --- UI grid layout --- #
 
@@ -145,7 +148,7 @@ class AppFrame(Frame):
         self.__btn_word_list = tk.Button(
             self.__container,
             text="Open",
-            command=lambda: self.__word_file(),
+            command=lambda: self.__word_file(askopenfilename()),
         )
         self.__btn_word_list.grid(row=1, column=2, sticky=tk.W)
 
@@ -192,8 +195,7 @@ class AppFrame(Frame):
 
     # --- callback methods for buttons --- #
 
-    def __word_file(self):
-        filename = askopenfilename()
+    def __word_file(self, filename):
         if filename:
             self.__word_list_filename.set(filename)
             self.__passgen.word_list = self.__word_list_filename.get()
@@ -217,8 +219,11 @@ if __name__ == "__main__":
     # argument parsing
     parser = argparse.ArgumentParser(
         description="Generate a secure passphrase",
-        epilog="Launch without arguments for GUI",
+        epilog="Launch without arguments for GUI mode\n"
+        + "or use -g | --gui with /path/to/word/list to preload the file\n"
+        + "\nPS: -n | --len has no effect in GUI mode",
         allow_abbrev=False,
+        formatter_class=argparse.RawTextHelpFormatter,
     )
     parser.add_argument(
         "filename",
@@ -237,10 +242,17 @@ if __name__ == "__main__":
         type=int,
         default=16,
     )
+    parser.add_argument(
+        "-g",
+        "--gui",
+        help="Run the program in GUI mode",
+        action="store_true",
+        dest="gui_mode",
+    )
     args = parser.parse_args()
 
     # main program logic
-    if args.filename is None:
-        AppFrame(App())
+    if args.filename is None or args.gui_mode:
+        AppFrame(App(), args.filename)
     else:
         print(PassGen(args.filename, args.char_limit).passphrase)
