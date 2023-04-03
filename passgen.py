@@ -149,12 +149,12 @@ class AppFrame(Frame):
         self.__lbl_password.grid(row=2, column=0)
 
     def combo_strength(self) -> None:
-        strength_selector = Combobox(self.__container, width=18)
-        strength_selector["values"] = tuple(
+        self.__strength = Combobox(self.__container, width=18)
+        self.__strength["values"] = tuple(
             key for key in PASS_STRENGTH.keys() if key
         )  # set non-empty values from dictionary
         strength_selector["state"] = "readonly"
-        strength_selector.current(2)
+        strength_selector.current(0)
 
     # --- action button group --- #
 
@@ -190,6 +190,7 @@ class AppFrame(Frame):
         self.__passgen.word_list = self.__word_list_filename
 
     def show_pass(self):
+        self.__passgen.char_limit = PASS_STRENGTH[self.__strength.get()]
         self.__txt_password.set(self.__passgen.passphrase)
 
     def copy_pass(self, passphrase):
