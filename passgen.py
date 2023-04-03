@@ -138,7 +138,7 @@ class AppFrame(Frame):
         self.__btn_word_list = tk.Button(
             self.__container,
             text="Open",
-            command=lambda: print(),  # TODO: call correct callback method
+            command=lambda: self.word_file(),
         )
         self.__btn_word_list.grid(row=1, column=2)
 
@@ -180,23 +180,24 @@ class AppFrame(Frame):
         self.__btn_clear = tk.Button(
             self.__container,
             text="Clear",
-            command=lambda: self.__txt_password.set(""),
+            command=lambda: self.clear_pass(),
         )
         self.__btn_clear.grid(row=3, column=2)
 
     def word_file(self):
         types = (("text files", "*.txt"), ("All files", "*.*"))
-        filename = askopenfilename(filetypes=types)
-        self.__passgen.word_list = filename
-        return filename
+        self.__word_list_filename.set(askopenfilename(filetypes=types))
+        self.__passgen.word_list = self.__word_list_filename
+
+    def show_pass(self):
+        self.__txt_password.set(self.__passgen.passphrase)
 
     def copy_pass(self, passphrase):
         self.__container.clipboard_clear()
         self.__container.clipboard_append(passphrase)
 
-    def show_pass(self):
-        self.__txt_password.set(self.__passgen.passphrase)
-
+    def clear_pass(self):
+        self.__txt_password.set("")
 
 if __name__ == "__main__":
     # argument parsing
