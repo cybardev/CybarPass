@@ -4,7 +4,20 @@ import tkinter as tk
 from tkinter.constants import DISABLED
 from tkinter.filedialog import askopenfilename
 from tkinter.ttk import Combobox, Frame
+from types import MappingProxyType
 from secrets import choice
+
+CONST = MappingProxyType(
+    {
+        "win-width":500,
+        "win-height":275,
+        "pass-strength": {
+            "Low": 16,
+            "Medium": 24,
+            "High": 32
+        }
+    }
+)
 
 # configuration variables
 WINDOW_WIDTH = 500
@@ -15,7 +28,7 @@ PASS_STRENGTH = {
     "Low": 16,
     "Medium": 24,
     "High": 36,
-}  # strength: password length
+}
 
 
 class PassGen:
