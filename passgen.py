@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import tkinter as tk
+from tkinter.constants import DISABLED
 from tkinter.filedialog import askopenfilename
 from tkinter.ttk import Combobox, Frame
 from secrets import choice
@@ -52,7 +53,7 @@ class PassGen:
 
     @property
     def passphrase(self) -> str:
-        return " ".join(self.__word_gen(self.__word_list, self.__char_limit))
+        return " ".join(self.__word_gen(self.word_list, self.char_limit))
 
 
 class App(tk.Tk):
@@ -117,7 +118,7 @@ class AppFrame(Frame):
             self.__container,
             textvariable=self.__txt_password,
         )
-        self.__entry_password.grid(row=1, column=1)
+        self.__entry_password.grid(row=0, column=1)
 
     # --- word list UI items --- #
 
@@ -129,6 +130,7 @@ class AppFrame(Frame):
         self.__entry_word_list = tk.Entry(
             self.__container,
             textvariable=self.__word_list_filename,
+            state=DISABLED,
         )
         self.__entry_word_list.grid(row=1, column=1)
 
@@ -158,38 +160,42 @@ class AppFrame(Frame):
 
     def btn_generate(self) -> None:
         # generate button
-        btn_generate = tk.Button(
+        self.__btn_generate = tk.Button(
             self.__container,
             text="Generate",
-            command=lambda: print(),  # TODO: call correct callback method
+            command=lambda: self.show_pass(),
         )
-        btn_generate.place(x=50, y=125)
+        self.__btn_generate.grid(row=3, column=0)
 
     def btn_copy(self) -> None:
-        pass
+        self.__btn_copy = tk.Button(
+            self.__container,
+            text="Copy",
+            command=lambda: self.copy_pass(self.__txt_password.get()),
+        )
+        self.__btn_copy.grid(row=3, column=1)
 
     def btn_clear(self) -> None:
         # clear button
-        btn_clear = tk.Button(
+        self.__btn_clear = tk.Button(
             self.__container,
             text="Clear",
-            command=lambda: print(),  # TODO: call correct callback method
+            command=lambda: self.__txt_password.set(""),
         )
-        btn_clear.place(x=175, y=125)
+        self.__btn_clear.grid(row=3, column=2)
 
     def word_file(self):
         types = (("text files", "*.txt"), ("All files", "*.*"))
-        return askopenfilename(filetypes=types)
+        filename = askopenfilename(filetypes=types)
+        self.__passgen.word_list = filename
+        return filename
 
-    def copy_pass(self, passphrase, app):
-        app.clipboard_clear()
-        app.clipboard_append(passphrase)
+    def copy_pass(self, passphrase):
+        self.__container.clipboard_clear()
+        self.__container.clipboard_append(passphrase)
 
-    # def show_pass(self, textbox):
-    #     textbox.set(passphrase_gen(PASS_STRENGTH[strength_selector.get()]))
-
-    def clear_pass(self, textbox):
-        textbox.set("")
+    def show_pass(self):
+        self.__txt_password.set(self.__passgen.passphrase)
 
 
 if __name__ == "__main__":
