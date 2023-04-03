@@ -203,7 +203,9 @@ class AppFrame(Frame):
 if __name__ == "__main__":
     # argument parsing
     parser = argparse.ArgumentParser(
-        description="Generate a secure passphrase", allow_abbrev=False
+        description="Generate a secure passphrase",
+        epilog="PS: other flags are ignored when -g is specified",
+        allow_abbrev=False,
     )
     parser.add_argument(
         "filename",
