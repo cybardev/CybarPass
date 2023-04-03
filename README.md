@@ -1,18 +1,22 @@
-# PyPass
+# PassGen
 
-## Minimalistic Password Generation script
+## Minimalistic Passphrase Generation script
 
 ```
-PyPass - Password Generation Utility.
+usage: passgen [-h] [-n NUM] [-g] [WORD_LIST]
 
-usage: pypass.py [--help] [--gui | -g] [--high | --medium | --low] [-h | -m | -l]
+Generate a secure passphrase
+
+positional arguments:
+  WORD_LIST          Path to dictionary file
 
 options:
-        --help      show this help message
-    -g, --gui       open in GUI mode
-    -h, --high      16-character password
-    -m, --medium    12-character password
-    -l, --low        8-character password
+  -h, --help         show this help message and exit
+  -n NUM, --len NUM  Minimum length of passphrase
+  -g, --gui          Run the program in GUI mode
 
-PS: If no options are specified, a 16-character password is generated.
+Launch without arguments for GUI mode
+or use -g | --gui with /path/to/word/list to preload the file
+
+PS: -n | --len has no effect in GUI mode
 ```
