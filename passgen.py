@@ -9,6 +9,7 @@ from secrets import choice
 
 CONST = MappingProxyType(
     {
+        "win-title": "PassGen",
         "win-width":500,
         "win-height":275,
         "pass-strength": {
@@ -73,8 +74,8 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        self.title("PassGen")
-        self.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
+        self.title(CONST["win-title"])
+        self.geometry(f"{CONST['win-width']}x{CONST['win-height']}")
         self.resizable(False, False)
 
 
