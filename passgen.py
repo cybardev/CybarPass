@@ -10,26 +10,11 @@ from secrets import choice
 CONST = MappingProxyType(
     {
         "win-title": "PassGen",
-        "win-width":500,
-        "win-height":275,
-        "pass-strength": {
-            "Low": 16,
-            "Medium": 24,
-            "High": 32
-        }
+        "win-width": 500,
+        "win-height": 275,
+        "pass-strength": {"Low": 16, "Medium": 24, "High": 32},
     }
 )
-
-# configuration variables
-WINDOW_WIDTH = 500
-WINDOW_HEIGHT = 275
-DEFAULT_FONT = "Arial"
-DEFAULT_FONT_SIZE = 14
-PASS_STRENGTH = {
-    "Low": 16,
-    "Medium": 24,
-    "High": 36,
-}
 
 
 class PassGen:
@@ -74,7 +59,7 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        self.title(CONST["win-title"])
+        self.title(str(CONST["win-title"]))
         self.geometry(f"{CONST['win-width']}x{CONST['win-height']}")
         self.resizable(False, False)
 
@@ -152,7 +137,7 @@ class AppFrame(Frame):
         self.__btn_word_list = tk.Button(
             self.__container,
             text="Open",
-            command=lambda: self.word_file(),
+            command=lambda: self.__word_file(),
         )
         self.__btn_word_list.grid(row=1, column=2)
 
@@ -164,11 +149,10 @@ class AppFrame(Frame):
 
     def combo_strength(self) -> None:
         self.__strength = Combobox(self.__container, width=18)
-        self.__strength["values"] = tuple(
-            key for key in PASS_STRENGTH.keys() if key
-        )  # set non-empty values from dictionary
-        strength_selector["state"] = "readonly"
-        strength_selector.current(0)
+        self.__strength["values"] = tuple(CONST["pass-strength"].keys())
+        self.__strength["state"] = "readonly"
+        self.__strength.current(0)
+        self.__strength.grid(row=2, column=1)
 
     # --- action button group --- #
 
@@ -177,7 +161,7 @@ class AppFrame(Frame):
         self.__btn_generate = tk.Button(
             self.__container,
             text="Generate",
-            command=lambda: self.show_pass(),
+            command=lambda: self.__show_pass(),
         )
         self.__btn_generate.grid(row=3, column=0)
 
@@ -185,7 +169,7 @@ class AppFrame(Frame):
         self.__btn_copy = tk.Button(
             self.__container,
             text="Copy",
-            command=lambda: self.copy_pass(self.__txt_password.get()),
+            command=lambda: self.__copy_pass(self.__txt_password.get()),
         )
         self.__btn_copy.grid(row=3, column=1)
 
@@ -194,25 +178,29 @@ class AppFrame(Frame):
         self.__btn_clear = tk.Button(
             self.__container,
             text="Clear",
-            command=lambda: self.clear_pass(),
+            command=lambda: self.__clear_pass(),
         )
         self.__btn_clear.grid(row=3, column=2)
 
-    def word_file(self):
-        types = (("text files", "*.txt"), ("All files", "*.*"))
-        self.__word_list_filename.set(askopenfilename(filetypes=types))
-        self.__passgen.word_list = self.__word_list_filename
+    # --- callback methods for buttons --- #
 
-    def show_pass(self):
-        self.__passgen.char_limit = PASS_STRENGTH[self.__strength.get()]
+    def __word_file(self):
+        self.__word_list_filename.set(askopenfilename())
+        self.__passgen.word_list = self.__word_list_filename.get()
+
+    def __show_pass(self):
+        self.__passgen.char_limit = CONST["pass-strength"][
+            self.__strength.get()
+        ]
         self.__txt_password.set(self.__passgen.passphrase)
 
-    def copy_pass(self, passphrase):
+    def __copy_pass(self, passphrase):
         self.__container.clipboard_clear()
         self.__container.clipboard_append(passphrase)
 
-    def clear_pass(self):
+    def __clear_pass(self):
         self.__txt_password.set("")
+
 
 if __name__ == "__main__":
     # argument parsing
