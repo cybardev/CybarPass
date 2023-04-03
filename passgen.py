@@ -208,6 +208,8 @@ if __name__ == "__main__":
         help="Path to dictionary file",
         metavar="WORD_LIST",
         type=str,
+        nargs="?",
+        default=None,
     )
     parser.add_argument(
         "-n",
@@ -231,5 +233,4 @@ if __name__ == "__main__":
     if args.gui_mode:
         AppFrame(App())
     else:
-        passgen = PassGen(args.filename, args.char_limit)
-        print(passgen.passphrase)
+        print(PassGen(args.filename, args.char_limit).passphrase)
