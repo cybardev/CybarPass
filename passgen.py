@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-import sys
 import argparse
 import tkinter as tk
 from tkinter.filedialog import askopenfilename
-from tkinter.ttk import Combobox
+from tkinter.ttk import Combobox, Frame
 from secrets import choice
 
 # configuration variables
@@ -18,115 +17,179 @@ PASS_STRENGTH = {
 }  # strength: password length
 
 
-def get_word_list(filename: str) -> list[str]:
-    with open(filename, "r") as f:
-        words = [line.strip() for line in f.readlines()]
-    return words
+class PassGen:
+    def __init__(self, filename=None, char_limit=16):
+        self.char_limit = char_limit
+        if filename is not None:
+            self.word_list = filename
+
+    @property
+    def char_limit(self):
+        return self.__char_limit
+
+    @char_limit.setter
+    def char_limit(self, value):
+        if value >= 16:
+            self.__char_limit = value
+        else:
+            print("Character limit must be at least 16 for security reasons.")
+
+    @property
+    def word_list(self):
+        return self.__word_list
+
+    @word_list.setter
+    def word_list(self, filename):
+        with open(filename, "r") as file:
+            self.__word_list = [line.strip() for line in file.readlines()]
+
+    def __word_gen(self, word_list: list[str], char_limit: int):
+        char_count = 0
+        while char_count < char_limit:
+            word = choice(word_list)
+            char_count += len(word)
+            yield word
+
+    @property
+    def passphrase(self) -> str:
+        return " ".join(self.__word_gen(self.__word_list, self.__char_limit))
 
 
-def word_gen(word_list: list[str], char_limit: int):
-    char_count = 0
-    while char_count < char_limit:
-        word = choice(word_list)
-        char_count += len(word)
-        yield word
+class App(tk.Tk):
+    def __init__(self):
+        super().__init__()
+
+        self.title("PassGen")
+        self.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
+        self.resizable(False, False)
 
 
-def passphrase_gen(word_list: list[str], char_limit: int) -> str:
-    return " ".join(word_gen(word_list, char_limit))
+class AppFrame(Frame):
+    def __init__(self, container: tk.Tk) -> None:
+        self.__container = container
+        super().__init__(self.__container)
 
+        # --- variable elements --- #
+        self.__passgen: PassGen = PassGen()
+        self.__txt_password = tk.StringVar()
+        self.__word_list_filename = tk.StringVar()
 
-def word_file():
-    types = (("text files", "*.txt"), ("All files", "*.*"))
-    return askopenfilename(filetypes=types)
+        # --- UI grid layout --- #
 
+        # rows
+        self.__container.grid_rowconfigure(0, weight=3)
+        self.__container.grid_rowconfigure(1, weight=1)
+        self.__container.grid_rowconfigure(2, weight=1)
+        self.__container.grid_rowconfigure(3, weight=2)
 
-def copy_pass(passphrase, app):
-    app.clipboard_clear()
-    app.clipboard_append(passphrase)
+        # columns
+        self.__container.grid_columnconfigure(0, weight=2)
+        self.__container.grid_columnconfigure(1, weight=3)
+        self.__container.grid_columnconfigure(2, weight=1)
 
+        # call UI builder methods --- #
 
-# def show_pass(textbox):
-#     textbox.set(passphrase_gen(PASS_STRENGTH[strength_selector.get()]))
+        self.lbl_password()
+        self.entry_password()
 
+        self.lbl_word_list()
+        self.entry_word_list()
+        self.btn_word_list()
 
-def clear_pass(textbox):
-    textbox.set("")
+        self.lbl_strength()
+        self.combo_strength()
 
+        self.btn_generate()
+        self.btn_copy()
+        self.btn_clear()
 
-def create_gui():
-    # initialize window
-    app = tk.Tk()
-    app.title("PassGen")
-    app.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
+        # --- render the frame --- #
+        self.__container.mainloop()
 
-    # --- generated password --- #
+    # --- password UI items --- #
 
-    # label
-    lbl_password = tk.Label(
-        app, text="Password:", font=(DEFAULT_FONT, DEFAULT_FONT_SIZE)
-    )
-    lbl_password.place(x=25, y=25)
+    def lbl_password(self) -> None:
+        self.__lbl_password = tk.Label(self.__container, text="Password:")
+        self.__lbl_password.grid(row=0, column=0)
 
-    # text box
-    txt_password = tk.StringVar()
-    entry_result = tk.Entry(
-        app,
-        font=(DEFAULT_FONT, DEFAULT_FONT_SIZE),
-        textvariable=txt_password,
-    )
-    entry_result.place(x=100, y=25)
+    def entry_password(self) -> None:
+        self.__entry_password = tk.Entry(
+            self.__container,
+            textvariable=self.__txt_password,
+        )
+        self.__entry_password.grid(row=1, column=1)
 
-    # --- word list to use --- #
+    # --- word list UI items --- #
 
-    # label
-    lbl_word_list = tk.Label(
-        app, text="Word List:", font=(DEFAULT_FONT, DEFAULT_FONT_SIZE)
-    )
-    lbl_word_list.place(x=25, y=100)
+    def lbl_word_list(self) -> None:
+        self.__lbl_password = tk.Label(self.__container, text="Word List:")
+        self.__lbl_password.grid(row=1, column=0)
 
-    # text box
-    word_list_filename = tk.StringVar()
-    word_list_namebox = tk.Entry(
-        app,
-        font=(DEFAULT_FONT, DEFAULT_FONT_SIZE),
-        textvariable=word_list_filename,
-    )
-    word_list_namebox.place(x=100, y=100)
+    def entry_word_list(self) -> None:
+        self.__entry_word_list = tk.Entry(
+            self.__container,
+            textvariable=self.__word_list_filename,
+        )
+        self.__entry_word_list.grid(row=1, column=1)
 
-    # button
-    btn_fileopen = tk.Button(
-        app,
-        text="Open",
-        font=(DEFAULT_FONT, DEFAULT_FONT_SIZE),
-        command=lambda: word_list_filename.set(word_file()),
-    )
-    btn_fileopen.place(x=300, y=100)
+    def btn_word_list(self) -> None:
+        self.__btn_word_list = tk.Button(
+            self.__container,
+            text="Open",
+            command=lambda: print(),  # TODO: call correct callback method
+        )
+        self.__btn_word_list.grid(row=1, column=2)
 
-    # -_- strength selection dropdown --- #
+    # --- strength selector UI items --- #
 
-    # label
-    lbl_strength = tk.Label(
-        app, text="Strength:", font=(DEFAULT_FONT, DEFAULT_FONT_SIZE)
-    )
-    lbl_strength.place(x=25, y=75)
+    def lbl_strength(self) -> None:
+        self.__lbl_password = tk.Label(self.__container, text="Strength:")
+        self.__lbl_password.grid(row=2, column=0)
 
-    # combo box
-    strength_selector = Combobox(
-        app, font=(DEFAULT_FONT, DEFAULT_FONT_SIZE), width=18
-    )
-    strength_selector["values"] = tuple(
-        k for k in PASS_STRENGTH.keys() if k
-    )  # set non-empty values from dictionary
-    strength_selector["state"] = "readonly"
-    strength_selector.current(2)
-    strength_selector.place(x=100, y=75)
+    def combo_strength(self) -> None:
+        strength_selector = Combobox(self.__container, width=18)
+        strength_selector["values"] = tuple(
+            key for key in PASS_STRENGTH.keys() if key
+        )  # set non-empty values from dictionary
+        strength_selector["state"] = "readonly"
+        strength_selector.current(2)
 
-    # --- spawn the GUI --- #
-    app.mainloop()
+    # --- action button group --- #
 
-    # exit after user quits
-    sys.exit(0)
+    def btn_generate(self) -> None:
+        # generate button
+        btn_generate = tk.Button(
+            self.__container,
+            text="Generate",
+            command=lambda: print(),  # TODO: call correct callback method
+        )
+        btn_generate.place(x=50, y=125)
+
+    def btn_copy(self) -> None:
+        pass
+
+    def btn_clear(self) -> None:
+        # clear button
+        btn_clear = tk.Button(
+            self.__container,
+            text="Clear",
+            command=lambda: print(),  # TODO: call correct callback method
+        )
+        btn_clear.place(x=175, y=125)
+
+    def word_file(self):
+        types = (("text files", "*.txt"), ("All files", "*.*"))
+        return askopenfilename(filetypes=types)
+
+    def copy_pass(self, passphrase, app):
+        app.clipboard_clear()
+        app.clipboard_append(passphrase)
+
+    # def show_pass(self, textbox):
+    #     textbox.set(passphrase_gen(PASS_STRENGTH[strength_selector.get()]))
+
+    def clear_pass(self, textbox):
+        textbox.set("")
 
 
 if __name__ == "__main__":
@@ -158,8 +221,9 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
+    # main program logic
     if args.gui_mode:
-        create_gui()
+        AppFrame(App())
     else:
-        # print a randomly generated passphrase
-        print(passphrase_gen(get_word_list(args.filename), args.char_limit))
+        passgen = PassGen(args.filename, args.char_limit)
+        print(passgen.passphrase)
