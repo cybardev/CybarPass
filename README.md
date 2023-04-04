@@ -2,7 +2,7 @@
 
 ## Minimalistic Passphrase Generation script with GUI
 
-<img width="562" alt="image" src="https://user-images.githubusercontent.com/50134239/229556378-8deb7501-8a65-4c7f-88a0-8c6c222e1df3.png">
+<img width="562" alt="image" src="https://user-images.githubusercontent.com/50134239/229692629-20cb301f-b577-4e9b-9299-b25516116861.png">
 
 ### Dependencies
 
