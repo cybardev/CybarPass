@@ -5,7 +5,7 @@ from cybarpass.passgen import PassGen
 from cybarpass.app import AppFrame
 
 # specify package version
-__version__ = "2.2"
+__version__ = "2.1"
 
 
 def run(
