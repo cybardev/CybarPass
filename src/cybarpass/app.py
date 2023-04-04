@@ -1,60 +1,9 @@
-#!/usr/bin/env python3
-
-import argparse
 import tkinter as tk
 from tkinter.constants import DISABLED
 from tkinter.filedialog import askopenfilename
 from tkinter.ttk import Combobox, Frame
-from types import MappingProxyType
-from secrets import choice
-
-# map of constants
-CONST = MappingProxyType(
-    {
-        "win-title": "PassGen",
-        "win-width": 450,
-        "win-height": 200,
-        "pass-strength": {"Low": 16, "Medium": 24, "High": 32},
-    }
-)
-
-
-class PassGen:
-    def __init__(self, filename=None, char_limit=16):
-        self.char_limit = char_limit
-        if filename is not None:
-            self.word_list = filename
-
-    @property
-    def char_limit(self):
-        return self.__char_limit
-
-    @char_limit.setter
-    def char_limit(self, value):
-        if value < 16:
-            print("Character limit must be at least 16 for security reasons.")
-        else:
-            self.__char_limit = value
-
-    @property
-    def word_list(self):
-        return self.__word_list
-
-    @word_list.setter
-    def word_list(self, filename):
-        with open(filename, "r") as file:
-            self.__word_list = [line.strip() for line in file.readlines()]
-
-    def __word_gen(self, word_list: list[str], char_limit: int):
-        char_count = 0
-        while char_count < char_limit:
-            word = choice(word_list)
-            char_count += len(word)
-            yield word
-
-    @property
-    def passphrase(self) -> str:
-        return " ".join(self.__word_gen(self.word_list, self.char_limit))
+from cybarpass.passgen import PassGen
+from cybarpass import CONST
 
 
 class App(tk.Tk):
@@ -67,7 +16,7 @@ class App(tk.Tk):
 
 
 class AppFrame(Frame):
-    def __init__(self, container: tk.Tk, filename=None) -> None:
+    def __init__(self, container: tk.Tk = App(), filename=None) -> None:
         self.__container = container
         super().__init__(self.__container)
 
@@ -126,9 +75,7 @@ class AppFrame(Frame):
             self.__container,
             textvariable=self.__txt_password,
         )
-        self.__entry_password.grid(
-            row=0, column=1, columnspan=2, sticky=tk.EW, padx=16
-        )
+        self.__entry_password.grid(row=0, column=1, columnspan=2, sticky=tk.EW, padx=16)
 
     # --- word list UI items --- #
 
@@ -163,9 +110,7 @@ class AppFrame(Frame):
         self.__strength["values"] = tuple(CONST["pass-strength"].keys())
         self.__strength["state"] = "readonly"
         self.__strength.current(0)
-        self.__strength.grid(
-            row=2, column=1, columnspan=2, sticky=tk.EW, padx=16
-        )
+        self.__strength.grid(row=2, column=1, columnspan=2, sticky=tk.EW, padx=16)
 
     # --- action button group --- #
 
@@ -201,9 +146,7 @@ class AppFrame(Frame):
             self.__passgen.word_list = self.__word_list_filename.get()
 
     def __show_pass(self):
-        self.__passgen.char_limit = CONST["pass-strength"][
-            self.__strength.get()
-        ]
+        self.__passgen.char_limit = CONST["pass-strength"][self.__strength.get()]
         self.__txt_password.set(self.__passgen.passphrase)
 
     def __copy_pass(self, passphrase):
@@ -213,46 +156,3 @@ class AppFrame(Frame):
 
     def __clear_pass(self):
         self.__txt_password.set("")
-
-
-if __name__ == "__main__":
-    # argument parsing
-    parser = argparse.ArgumentParser(
-        description="Generate a secure passphrase",
-        epilog="Launch without arguments for GUI mode\n"
-        + "or use -g | --gui with /path/to/word/list to preload the file\n"
-        + "\nPS: -n | --len has no effect in GUI mode",
-        allow_abbrev=False,
-        formatter_class=argparse.RawTextHelpFormatter,
-    )
-    parser.add_argument(
-        "filename",
-        help="Path to dictionary file",
-        metavar="WORD_LIST",
-        type=str,
-        nargs="?",
-        default=None,
-    )
-    parser.add_argument(
-        "-n",
-        "--len",
-        help="Minimum length of passphrase",
-        dest="char_limit",
-        metavar="NUM",
-        type=int,
-        default=16,
-    )
-    parser.add_argument(
-        "-g",
-        "--gui",
-        help="Run the program in GUI mode",
-        action="store_true",
-        dest="gui_mode",
-    )
-    args = parser.parse_args()
-
-    # main program logic
-    if args.filename is None or args.gui_mode:
-        AppFrame(App(), args.filename)
-    else:
-        print(PassGen(args.filename, args.char_limit).passphrase)

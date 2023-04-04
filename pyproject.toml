@@ -1,0 +1,23 @@
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[project]
+name = "cybarpass"
+version = "2.0"
+authors = [
+  { name="cybardev", email="sheikh@cybar.dev" },
+]
+description = "Minimalistic Passphrase Generation script with GUI"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+homepage = "https://pass.cybar.dev"
+repository = "https://github.com/cybardev/cybarpass.git"
+documentation = "https://github.com/cybardev/CybarPass/blob/main/README.md"

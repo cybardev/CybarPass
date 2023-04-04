@@ -80,3 +80,6 @@ $ passgen /usr/share/dict/words -n 512
 
 - [tkinter — Python interface to Tcl/Tk](https://docs.python.org/3/library/tkinter.html) on [docs.python.org](https://docs.python.org/)
 
+- [Packaging Python Projects](https://packaging.python.org/en/latest/tutorials/packaging-projects/) on [packaging.python.org](https://packaging.python.org)
+
+- [The .pypirc file](https://packaging.python.org/en/latest/specifications/pypirc/) on [packaging.python.org](https://packaging.python.org)
