@@ -4,7 +4,7 @@ build-backend = "pdm.backend"
 
 [project]
 name = "cybarpass"
-version = "2.0"
+version = "2.2"
 authors = [
   { name="cybardev", email="sheikh@cybar.dev" },
 ]

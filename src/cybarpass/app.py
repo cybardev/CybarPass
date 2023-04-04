@@ -1,9 +1,19 @@
 import tkinter as tk
+from types import MappingProxyType
 from tkinter.constants import DISABLED
 from tkinter.filedialog import askopenfilename
 from tkinter.ttk import Combobox, Frame
 from cybarpass.passgen import PassGen
-from cybarpass import CONST
+
+# map of constants
+CONST = MappingProxyType(
+    {
+        "win-title": "PassGen",
+        "win-width": 450,
+        "win-height": 200,
+        "pass-strength": {"Low": 16, "Medium": 24, "High": 32},
+    }
+)
 
 
 class App(tk.Tk):
@@ -75,7 +85,9 @@ class AppFrame(Frame):
             self.__container,
             textvariable=self.__txt_password,
         )
-        self.__entry_password.grid(row=0, column=1, columnspan=2, sticky=tk.EW, padx=16)
+        self.__entry_password.grid(
+            row=0, column=1, columnspan=2, sticky=tk.EW, padx=16
+        )
 
     # --- word list UI items --- #
 
@@ -110,7 +122,9 @@ class AppFrame(Frame):
         self.__strength["values"] = tuple(CONST["pass-strength"].keys())
         self.__strength["state"] = "readonly"
         self.__strength.current(0)
-        self.__strength.grid(row=2, column=1, columnspan=2, sticky=tk.EW, padx=16)
+        self.__strength.grid(
+            row=2, column=1, columnspan=2, sticky=tk.EW, padx=16
+        )
 
     # --- action button group --- #
 
@@ -146,7 +160,9 @@ class AppFrame(Frame):
             self.__passgen.word_list = self.__word_list_filename.get()
 
     def __show_pass(self):
-        self.__passgen.char_limit = CONST["pass-strength"][self.__strength.get()]
+        self.__passgen.char_limit = CONST["pass-strength"][
+            self.__strength.get()
+        ]
         self.__txt_password.set(self.__passgen.passphrase)
 
     def __copy_pass(self, passphrase):
