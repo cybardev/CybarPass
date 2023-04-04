@@ -1,4 +1,4 @@
-# PassGen
+# CybarPass
 
 ## Minimalistic Passphrase Generation script with GUI
 
@@ -13,7 +13,7 @@
 
 ### Installation
 
-1. [Download](https://github.com/cybardev/PassGen/releases/download/v2.0/passgen) the executable `passgen` from Releases or clone this repository using `git clone https://github.com/cybardev/PassGen.git` and rename `passgen.py` to `passgen`
+1. [Download](https://github.com/cybardev/CybarPass/releases/download/v2.0/passgen) the executable `passgen` from Releases or clone this repository using `git clone https://github.com/cybardev/CybarPass.git` and rename `passgen.py` to `passgen`
 
 2. Place the executable `passgen` on `$PATH`
 
