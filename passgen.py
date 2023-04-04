@@ -118,7 +118,7 @@ class AppFrame(Frame):
     # --- password UI items --- #
 
     def lbl_password(self) -> None:
-        self.__lbl_password = tk.Label(self.__container, text="Password:")
+        self.__lbl_password = tk.Label(self.__container, text="Passphrase:")
         self.__lbl_password.grid(row=0, column=0)
 
     def entry_password(self) -> None:
