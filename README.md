@@ -14,7 +14,7 @@
 ### Installation
 
 1.  Open terminal and run `python3 -m pip install cybarpass`
-2.  Make sure it is executable on the `$PATH`
+2.  Set a shell alias: `alias cybarpass="python3 -m cybarpass"`
 3.  Run according to the instructions below
 
 ### Usage
@@ -64,9 +64,6 @@ $ cybarpass /usr/share/dict/words
 $ cybarpass /usr/share/dict/words -n 512
 ```
 
-**PS**: the above commands assume `cybarpass` is available on `$PATH` or
-is aliased to the module
-
 ### Resources
 
 -   [Developing a Full Tkinter Object-Oriented Application](https://www.pythontutorial.net/tkinter/tkinter-object-oriented-application/) on [pythontutorial.net](https://www.pythontutorial.net/)
@@ -76,3 +73,4 @@ is aliased to the module
 -   [tkinter — Python interface to Tcl/Tk](https://docs.python.org/3/library/tkinter.html) on [docs.python.org](https://docs.python.org/)
 -   [Packaging Python Projects](https://packaging.python.org/en/latest/tutorials/packaging-projects/) on [packaging.python.org](https://packaging.python.org)
 -   [The .pypirc file](https://packaging.python.org/en/latest/specifications/pypirc/) on [packaging.python.org](https://packaging.python.org)
+-   [How to Create and Upload Your First Python Package to PyPI](https://www.freecodecamp.org/news/how-to-create-and-upload-your-first-python-package-to-pypi/) on [freecodecamp.org](https://www.freecodecamp.org)

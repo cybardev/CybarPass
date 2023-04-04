@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
-import cybarpass
+from .__runner import run
 
 if __name__ == "__main__":
     # argument parsing
@@ -39,5 +39,5 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    # main program logic
-    cybarpass.run(args.filename, args.char_limit, args.gui_mode)
+    # invoke main program logic
+    run(args.filename, args.char_limit, args.gui_mode)

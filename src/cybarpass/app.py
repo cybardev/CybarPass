@@ -1,9 +1,10 @@
 import tkinter as tk
+from typing import Union
 from types import MappingProxyType
 from tkinter.constants import DISABLED
 from tkinter.filedialog import askopenfilename
 from tkinter.ttk import Combobox, Frame
-from cybarpass.passgen import PassGen
+from .passgen import PassGen
 
 # map of constants
 CONST = MappingProxyType(
@@ -26,12 +27,14 @@ class App(tk.Tk):
 
 
 class AppFrame(Frame):
-    def __init__(self, container: tk.Tk = App(), filename=None) -> None:
+    def __init__(
+        self, container: tk.Tk = App(), filename: Union[str, None] = None
+    ) -> None:
         self.__container = container
         super().__init__(self.__container)
 
         # --- variable elements --- #
-        self.__passgen: PassGen = PassGen()
+        self.__passgen = PassGen()
         self.__txt_password = tk.StringVar()
         self.__word_list_filename = tk.StringVar()
 
@@ -154,21 +157,21 @@ class AppFrame(Frame):
 
     # --- callback methods for buttons --- #
 
-    def __word_file(self, filename):
+    def __word_file(self, filename) -> None:
         if filename:
             self.__word_list_filename.set(filename)
             self.__passgen.word_list = self.__word_list_filename.get()
 
-    def __show_pass(self):
+    def __show_pass(self) -> None:
         self.__passgen.char_limit = CONST["pass-strength"][
             self.__strength.get()
         ]
         self.__txt_password.set(self.__passgen.passphrase)
 
-    def __copy_pass(self, passphrase):
+    def __copy_pass(self, passphrase: str) -> None:
         if passphrase:
             self.__container.clipboard_clear()
             self.__container.clipboard_append(passphrase)
 
-    def __clear_pass(self):
+    def __clear_pass(self) -> None:
         self.__txt_password.set("")
