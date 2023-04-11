@@ -2,7 +2,7 @@
 
 ## Minimalistic Passphrase Generation script with GUI
 
-<img width="562" alt="image" src="https://user-images.githubusercontent.com/50134239/229692629-20cb301f-b577-4e9b-9299-b25516116861.png">
+<img width="562" alt="image" src="https://user-images.githubusercontent.com/50134239/231045484-9d4fa669-832f-45a6-8389-0b702a6fe86e.png">
 
 ### Dependencies
 
@@ -42,10 +42,7 @@ options:
   -n NUM, --len NUM  Minimum length of passphrase
   -g, --gui          Run the program in GUI mode
 
-Launch without arguments for GUI mode
-or use -g | --gui with /path/to/word/list to preload the file
-
-PS: -n | --len has no effect in GUI mode
+NOTE: -n | --len has no effect in GUI mode
 ```
 
 #### Example Runs
