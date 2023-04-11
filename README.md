@@ -19,11 +19,8 @@
 
 ### Usage
 
-1.  GUI mode: run `cybarpass` in the terminal
-2.  GUI mode with word list preload: run
-    `cybarpass -g /path/to/word/list`
-3.  CLI mode: run `cybarpass /path/to/word/list` with optional parameter
-    `-n`
+1.  CLI mode: run `cybarpass` with optional parameter `-n`
+2.  GUI mode: run `cybarpass -g`
 
 #### Help Screen
 

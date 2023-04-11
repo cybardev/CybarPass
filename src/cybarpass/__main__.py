@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import os
+import sys
 import argparse
 from .__runner import run
 
@@ -7,9 +9,7 @@ if __name__ == "__main__":
     # argument parsing
     parser = argparse.ArgumentParser(
         description="Generate a secure passphrase",
-        epilog="Launch without arguments for GUI mode\n"
-        + "or use -g | --gui with /path/to/word/list to preload the file\n"
-        + "\nPS: -n | --len has no effect in GUI mode",
+        epilog="NOTE: -n | --len has no effect in GUI mode",
         allow_abbrev=False,
         formatter_class=argparse.RawTextHelpFormatter,
     )
@@ -19,7 +19,7 @@ if __name__ == "__main__":
         metavar="WORD_LIST",
         type=str,
         nargs="?",
-        default=None,
+        default=f"{os.path.dirname(sys.argv[0])}/words",
     )
     parser.add_argument(
         "-n",

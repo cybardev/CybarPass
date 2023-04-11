@@ -9,7 +9,7 @@ from .passgen import PassGen
 # map of constants
 CONST = MappingProxyType(
     {
-        "win-title": "PassGen",
+        "win-title": "CybarPass",
         "win-width": 450,
         "win-height": 200,
         "pass-strength": {"Low": 16, "Medium": 24, "High": 32},
@@ -89,7 +89,11 @@ class AppFrame(Frame):
             textvariable=self.__txt_password,
         )
         self.__entry_password.grid(
-            row=0, column=1, columnspan=2, sticky=tk.EW, padx=16
+            row=0,
+            column=1,
+            columnspan=2,
+            sticky=tk.EW,
+            padx=16,
         )
 
     # --- word list UI items --- #
@@ -126,7 +130,11 @@ class AppFrame(Frame):
         self.__strength["state"] = "readonly"
         self.__strength.current(0)
         self.__strength.grid(
-            row=2, column=1, columnspan=2, sticky=tk.EW, padx=16
+            row=2,
+            column=1,
+            columnspan=2,
+            sticky=tk.EW,
+            padx=16,
         )
 
     # --- action button group --- #
@@ -163,9 +171,7 @@ class AppFrame(Frame):
             self.__passgen.word_list = self.__word_list_filename.get()
 
     def __show_pass(self) -> None:
-        self.__passgen.char_limit = CONST["pass-strength"][
-            self.__strength.get()
-        ]
+        self.__passgen.char_limit = CONST["pass-strength"][self.__strength.get()]
         self.__txt_password.set(self.__passgen.passphrase)
 
     def __copy_pass(self, passphrase: str) -> None:
