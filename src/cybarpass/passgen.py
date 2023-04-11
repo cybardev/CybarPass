@@ -1,3 +1,4 @@
+from sys import exit
 from typing import Union
 from secrets import choice
 
@@ -25,8 +26,21 @@ class PassGen:
 
     @word_list.setter
     def word_list(self, filename) -> None:
-        with open(filename, "r") as file:
-            self.__word_list = [line.strip() for line in file.readlines()]
+        try:
+            with open(filename, "r") as file:
+                # ensure file is not empty by checking existence of first char
+                file.seek(0)
+                if not file.read(1):
+                    raise FileNotFoundError(f"File is empty: '{filename}'")
+                else:
+                    # reset pointer to start of file
+                    file.seek(0)
+
+                # load words from file into local list
+                self.__word_list = [line.strip() for line in file.readlines()]
+        except FileNotFoundError as fnf_err:
+            print(fnf_err)
+            exit(1)
 
     def __word_gen(self, word_list: list[str], char_limit: int):
         char_count = 0
