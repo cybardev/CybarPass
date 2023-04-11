@@ -8,6 +8,7 @@ from .__runner import run
 if __name__ == "__main__":
     # argument parsing
     parser = argparse.ArgumentParser(
+        prog="cybarpass",
         description="Generate a secure passphrase",
         epilog="NOTE: -n | --len has no effect in GUI mode",
         allow_abbrev=False,
